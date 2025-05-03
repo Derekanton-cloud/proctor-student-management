@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Proctor Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="/proctor/dashboard">Dashboard</a></li>
+                <li><a href="/proctor/performance">Performance Tracking</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Welcome, <%= proctor.name %>!</h2>
+            <p>Here you can manage your assigned students and track their performance.</p>
+        </section>
+        <section>
+            <h3>Assigned Students</h3>
+            <ul>
+                <% assignedStudents.forEach(student => { %>
+                    <li>
+                        <a href="/student/<%= student.id %>/dashboard"><%= student.name %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 DBMS Proctor-Student Management System</p>
+    </footer>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

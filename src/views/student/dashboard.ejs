@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Welcome, <%= user.name %>!</h1>
+            <nav>
+                <ul>
+                    <li><a href="/student/dashboard">Dashboard</a></li>
+                    <li><a href="/student/assignments">Assignments</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="assignments">
+                <h2>Your Assignments</h2>
+                <ul>
+                    <% assignments.forEach(function(assignment) { %>
+                        <li>
+                            <a href="/student/assignments/<%= assignment.id %>"><%= assignment.title %></a>
+                            <span>Due: <%= assignment.dueDate %></span>
+                        </li>
+                    <% }); %>
+                </ul>
+            </section>
+            <section class="performance">
+                <h2>Your Performance</h2>
+                <p>Current GPA: <%= student.gpa %></p>
+                <p>Completed Assignments: <%= student.completedAssignments %></p>
+                <p>Pending Assignments: <%= student.pendingAssignments %></p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

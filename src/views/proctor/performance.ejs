@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor Performance</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('../layouts/main.ejs') %>
+    <div class="container">
+        <h1>Student Performance Metrics</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Assignment Score</th>
+                    <th>Attendance</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% students.forEach(student => { %>
+                    <tr>
+                        <td><%= student.name %></td>
+                        <td><%= student.assignmentScore %></td>
+                        <td><%= student.attendance %></td>
+                        <td>
+                            <form action="/proctor/remarks" method="POST">
+                                <input type="hidden" name="studentId" value="<%= student.id %>">
+                                <textarea name="remarks" placeholder="Write remarks here..."></textarea>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

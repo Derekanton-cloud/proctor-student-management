@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Proctor Management System</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFDAB9; /* Peach background */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(45deg, #FFDAB9 25%, #FFE4C4 25%, #FFE4C4 50%, #FFDAB9 50%, #FFDAB9 75%, #FFE4C4 75%, #FFE4C4 100%);
+            background-size: 56.57px 56.57px;
+        }
+        
+        .login-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(139, 0, 0, 0.15);
+            width: 380px;
+            padding: 40px;
+            border-top: 5px solid #800000; /* Maroon top border */
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFDAB9 100%);
+            box-shadow: 0 4px 8px rgba(139, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #800000; /* Maroon text */
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .error-list {
+            background-color: #fff5f5;
+            border-left: 4px solid #800000; /* Maroon border */
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .error-list li {
+            color: #800000; /* Maroon text */
+            margin: 5px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #FFE4B5; /* Lighter peach */
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            background-color: #FFF8EE; /* Very light peach */
+        }
+        
+        input:focus {
+            border-color: #800000; /* Maroon border on focus */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        
+        input::placeholder {
+            color: #BCA29A; /* Muted peach/brown */
+        }
+        
+        button {
+            background-color: #800000; /* Maroon button */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            background-color: #9A0000; /* Lighter maroon on hover */
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 24px;
+            color: #A67B5B; /* Brownish peach */
+            font-size: 15px;
+        }
+        
+        .register-link a {
+            color: #800000; /* Maroon link */
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo span {
+            font-size: 36px;
+            color: #800000; /* Maroon */
+            font-weight: bold;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFDAB9 100%);
+            box-shadow: 0 4px 8px rgba(139, 0, 0, 0.1);
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="/images/logo 2.png" alt="Proctor Management System Logo">
+        </div>
+        <h1>Welcome Back</h1>
+        
+        <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+            <ul class="error-list">
+                <% errors.forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+        
+        <form action="/auth/login" method="POST">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+        
+        <div class="register-link">
+            Don't have an account? <a href="/auth/register">Register Now</a>
+        </div>
+    </div>
+</body>
+</html>

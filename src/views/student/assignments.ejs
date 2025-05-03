@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Assignments</h1>
+        <ul class="assignment-list">
+            <% assignments.forEach(function(assignment) { %>
+                <li>
+                    <h2><%= assignment.title %></h2>
+                    <p><%= assignment.description %></p>
+                    <p>Due Date: <%= assignment.dueDate %></p>
+                    <a href="/student/assignments/<%= assignment.id %>" class="btn">View Assignment</a>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

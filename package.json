@@ -1,0 +1,38 @@
+{
+  "name": "dbms-proctor-student-management",
+  "version": "1.0.0",
+  "description": "A web application for managing proctor-student interactions, assignments, and performance tracking.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "express-validator": "^6.15.0",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.7.0",
+    "pg": "^8.15.6",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "keywords": [
+    "database",
+    "management",
+    "proctor",
+    "student",
+    "performance",
+    "assignments"
+  ],
+  "author": "Your Name",
+  "license": "ISC"
+}

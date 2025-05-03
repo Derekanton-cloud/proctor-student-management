@@ -1,0 +1,65 @@
+body {
+    background-color: #f8e1d4; /* Peach background */
+    color: #5c2e2e; /* Maroon text */
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #5c2e2e; /* Maroon header */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    color: #5c2e2e; /* Maroon links */
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    padding: 20px;
+}
+
+footer {
+    background-color: #5c2e2e; /* Maroon footer */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.button {
+    background-color: #f8e1d4; /* Peach button */
+    color: #5c2e2e; /* Maroon text */
+    border: 2px solid #5c2e2e; /* Maroon border */
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #5c2e2e; /* Maroon on hover */
+    color: white;
+}
+
+.form-input {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #5c2e2e; /* Maroon border */
+    border-radius: 5px;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
