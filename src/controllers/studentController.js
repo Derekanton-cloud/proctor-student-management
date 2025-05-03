@@ -1,19 +1,38 @@
 const Student = require('../models/studentModel');
+const db = require('../config/db');
 
 // Function to get the student dashboard
 exports.getDashboard = async (req, res) => {
     try {
-        const studentId = req.user.id; // Assuming user ID is stored in req.user
-        const studentData = await Student.findOne({ where: { userId: studentId } }); // Use Sequelize's `findOne`
-        if (!studentData) {
-            return res.status(404).send('Student not found');
+        // Safety check for user session
+        if (!req.session || !req.session.user || !req.session.user.id) {
+            console.log('Missing user in session:', req.session);
+            return res.redirect('/auth/login');
         }
-        res.render('student/dashboard', { student: studentData });
+
+        // Fetch student details from database
+        const userId = req.session.user.id;
+        const studentDetails = await db.query(
+            'SELECT * FROM users WHERE id = $1 AND role = $2',
+            [userId, 'student']
+        );
+
+        // Render dashboard with user data
+        res.render('student/dashboard', {
+            title: 'Student Dashboard',
+            user: req.session.user,
+            // Additional data you might want to pass to the view
+            studentDetails: studentDetails.rows[0] || {}
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server Error');
+        console.error('Error in student dashboard:', error);
+        res.status(500).render('error', {
+            message: 'Error loading dashboard',
+            error: process.env.NODE_ENV === 'development' ? error : {}
+        });
     }
 };
+
 
 // Function to view assignments
 exports.viewAssignments = async (req, res) => {

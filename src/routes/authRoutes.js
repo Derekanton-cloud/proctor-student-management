@@ -84,7 +84,12 @@ router.post(
             }
 
             // Successful login
-            req.session.user = user.rows[0];
+            req.session.user = {
+                id: user.rows[0].id,  // Make sure this exists!
+                name: user.rows[0].name,
+                email: user.rows[0].email,
+                role: user.rows[0].role
+            };
             res.redirect('/student/dashboard'); // Redirect to student dashboard (or proctor dashboard based on role)
         } catch (err) {
             console.error(err);

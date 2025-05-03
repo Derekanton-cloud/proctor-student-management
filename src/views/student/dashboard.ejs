@@ -3,40 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFDAB9; /* Peach background */
+            margin: 0;
+            padding: 0;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(139, 0, 0, 0.1);
+        }
+        
+        .welcome-header {
+            color: #800000; /* Maroon text */
+            border-bottom: 2px solid #FFDAB9;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .widget {
+            background-color: #FFF8EE;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.08);
+        }
+        
+        .widget h3 {
+            color: #800000;
+            margin-top: 0;
+            border-bottom: 1px solid #FFE4B5;
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
-        <header>
-            <h1>Welcome, <%= user.name %>!</h1>
-            <nav>
-                <ul>
-                    <li><a href="/student/dashboard">Dashboard</a></li>
-                    <li><a href="/student/assignments">Assignments</a></li>
-                    <li><a href="/auth/logout">Logout</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <section class="assignments">
-                <h2>Your Assignments</h2>
-                <ul>
-                    <% assignments.forEach(function(assignment) { %>
-                        <li>
-                            <a href="/student/assignments/<%= assignment.id %>"><%= assignment.title %></a>
-                            <span>Due: <%= assignment.dueDate %></span>
-                        </li>
-                    <% }); %>
-                </ul>
-            </section>
-            <section class="performance">
-                <h2>Your Performance</h2>
-                <p>Current GPA: <%= student.gpa %></p>
-                <p>Completed Assignments: <%= student.completedAssignments %></p>
-                <p>Pending Assignments: <%= student.pendingAssignments %></p>
-            </section>
-        </main>
+        <div class="welcome-header">
+            <h1>Student Dashboard</h1>
+            <p>Welcome, <%= user.name %>!</p>
+        </div>
+        
+        <div class="dashboard-widgets">
+            <div class="widget">
+                <h3>Your Profile</h3>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Role:</strong> <%= user.role %></p>
+                <!-- Add more profile details as needed -->
+                <a href="/student/profile">Edit Profile</a>
+            </div>
+            
+            <div class="widget">
+                <h3>Your Assignments</h3>
+                <p>You have 0 pending assignments</p>
+                <a href="/student/assignments">View All Assignments</a>
+            </div>
+            
+            <div class="widget">
+                <h3>Recent Performance</h3>
+                <p>No performance data available</p>
+                <a href="/student/performance">View Performance Details</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

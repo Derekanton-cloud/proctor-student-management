@@ -1,32 +1,72 @@
 const express = require('express');
 const router = express.Router();
 const studentController = require('../controllers/studentController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const { isAuthenticated, isStudent } = require('../middlewares/authMiddleware');
 
-// Ensure all controller methods exist before using them
+// Default controller methods if they don't exist yet
 if (!studentController.getDashboard) {
-    studentController.getDashboard = (req, res) => res.send('Student Dashboard');
+    studentController.getDashboard = (req, res) => {
+        try {
+            // Make sure user exists in session
+            if (!req.session.user) {
+                return res.redirect('/auth/login');
+            }
+            
+            // Log for debugging
+            console.log('User session:', req.session.user);
+            
+            res.render('student/dashboard', { 
+                user: req.session.user,
+                title: 'Student Dashboard'
+            });
+        } catch (error) {
+            console.error('Error in student dashboard:', error);
+            res.status(500).send('An error occurred rendering the dashboard');
+        }
+    };
 }
+
 if (!studentController.viewAssignments) {
-    studentController.viewAssignments = (req, res) => res.send('View Assignments');
+    studentController.viewAssignments = (req, res) => {
+        res.render('student/assignments', { 
+            user: req.session.user,
+            title: 'Assignments',
+            assignments: []
+        });
+    };
 }
+
 if (!studentController.submitAssignment) {
-    studentController.submitAssignment = (req, res) => res.send('Submit Assignment');
+    studentController.submitAssignment = (req, res) => {
+        // This would typically process form data and save to database
+        res.redirect('/student/assignments');
+    };
 }
+
 if (!studentController.viewPerformance) {
-    studentController.viewPerformance = (req, res) => res.send('View Performance');
+    studentController.viewPerformance = (req, res) => {
+        res.render('student/performance', { 
+            user: req.session.user,
+            title: 'Performance Metrics',
+            metrics: []
+        });
+    };
 }
+
+// Apply authentication middleware to all routes in this router
+router.use(isAuthenticated);
+router.use(isStudent);
 
 // Route to get student dashboard
-router.get('/dashboard', authMiddleware(), studentController.getDashboard);
+router.get('/dashboard', studentController.getDashboard);
 
 // Route to view assignments
-router.get('/assignments', authMiddleware(), studentController.viewAssignments);
+router.get('/assignments', studentController.viewAssignments);
 
 // Route to submit an assignment
-router.post('/assignments/submit', authMiddleware(), studentController.submitAssignment);
+router.post('/assignments/submit', studentController.submitAssignment);
 
 // Route to view performance metrics
-router.get('/performance', authMiddleware(), studentController.viewPerformance);
+router.get('/performance', studentController.viewPerformance);
 
 module.exports = router;
