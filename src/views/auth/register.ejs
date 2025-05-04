@@ -150,6 +150,36 @@
             height: 60px;
             line-height: 60px;
         }
+
+        .role-selection {
+            margin-bottom: 24px;
+        }
+        
+        .role-selection label {
+            color: #800000;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .role-options {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .role-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .role-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .role-option span {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -176,6 +206,19 @@
             </div>
             <div class="form-group">
                 <input type="password" name="password" placeholder="Password (minimum 6 characters)" required>
+            </div>
+            <div class="form-group role-selection">
+                <label>Register as:</label>
+                <div class="role-options">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="student" checked>
+                        <span>Student</span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="proctor">
+                        <span>Proctor</span>
+                    </label>
+                </div>
             </div>
             <button type="submit">Register</button>
         </form>

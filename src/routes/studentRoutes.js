@@ -11,11 +11,11 @@ if (!studentController.getDashboard) {
             if (!req.session.user) {
                 return res.redirect('/auth/login');
             }
-            
+
             // Log for debugging
             console.log('User session:', req.session.user);
-            
-            res.render('student/dashboard', { 
+
+            res.render('student/dashboard', {
                 user: req.session.user,
                 title: 'Student Dashboard'
             });
@@ -28,7 +28,7 @@ if (!studentController.getDashboard) {
 
 if (!studentController.viewAssignments) {
     studentController.viewAssignments = (req, res) => {
-        res.render('student/assignments', { 
+        res.render('student/assignments', {
             user: req.session.user,
             title: 'Assignments',
             assignments: []
@@ -45,7 +45,7 @@ if (!studentController.submitAssignment) {
 
 if (!studentController.viewPerformance) {
     studentController.viewPerformance = (req, res) => {
-        res.render('student/performance', { 
+        res.render('student/performance', {
             user: req.session.user,
             title: 'Performance Metrics',
             metrics: []

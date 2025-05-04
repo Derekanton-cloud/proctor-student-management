@@ -6,16 +6,16 @@ const { isAuthenticated, isProctor } = require('../middlewares/authMiddleware');
 // Define default controller methods if they don't exist
 if (!proctorController.getProctorDashboard) {
     proctorController.getProctorDashboard = (req, res) => {
-        res.render('proctor/dashboard', { 
+        res.render('proctor/dashboard', {
             user: req.session.user,
-            title: 'Proctor Dashboard' 
+            title: 'Proctor Dashboard'
         });
     };
 }
 
 if (!proctorController.viewStudentPerformance) {
     proctorController.viewStudentPerformance = (req, res) => {
-        res.render('proctor/student-performance', { 
+        res.render('proctor/student-performance', {
             user: req.session.user,
             title: 'Student Performance',
             studentId: req.params.studentId,
