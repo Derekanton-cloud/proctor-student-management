@@ -23,6 +23,10 @@ exports.getProctorDashboard = async (req, res) => {
     }
 };
 
+exports.aiAnalysis = (req, res) => {
+    res.redirect('/ai/proctor/analysis');
+};
+
 // View student performance
 exports.viewStudentPerformance = async (req, res) => {
     try {

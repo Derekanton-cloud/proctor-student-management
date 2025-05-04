@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFDAB9;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(139, 0, 0, 0.1);
+        }
+        
+        h1, h2, h3 {
+            color: #800000;
+        }
+        
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            background-color: #800000;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        
+        .students-list {
+            margin-bottom: 30px;
+        }
+        
+        .student-card {
+            padding: 15px;
+            border: 1px solid #FFDAB9;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .student-card:hover {
+            background-color: #FFF8EE;
+        }
+        
+        .student-name {
+            font-weight: bold;
+            color: #800000;
+        }
+        
+        .student-email {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .analyze-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        
+        .analysis-results {
+            padding: 20px;
+            border: 1px solid #FFDAB9;
+            border-radius: 8px;
+            background-color: #FFF8EE;
+            margin-top: 20px;
+            white-space: pre-line;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .error {
+            color: #d9534f;
+            padding: 10px;
+            background-color: #f9e2e2;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="/proctor/dashboard" class="back-btn">← Back to Dashboard</a>
+            <h1>Student Performance Analysis</h1>
+        </div>
+        
+        <p>Select a student to analyze their performance data with AI insights:</p>
+        
+        <div class="students-list">
+            <% if (students && students.length > 0) { %>
+                <% students.forEach(student => { %>
+                    <div class="student-card" id="student-<%= student.id %>">
+                        <span class="student-name"><%= student.name %></span>
+                        <span class="student-email"><%= student.email %></span>
+                        <button class="analyze-btn" onclick="analyzeStudent('<%= student.id %>', '<%= student.name %>')">
+                            Analyze
+                        </button>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No students found.</p>
+            <% } %>
+        </div>
+        
+        <div id="analysis-container" style="display: none;">
+            <h2>Analysis for <span id="student-name-display"></span></h2>
+            <div id="analysis-results" class="analysis-results">
+                Select a student and click "Analyze" to see AI insights.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function analyzeStudent(studentId, studentName) {
+            const analysisContainer = document.getElementById('analysis-container');
+            const analysisResults = document.getElementById('analysis-results');
+            const studentNameDisplay = document.getElementById('student-name-display');
+            
+            // Show analysis section
+            analysisContainer.style.display = 'block';
+            studentNameDisplay.textContent = studentName;
+            
+            // Show loading state
+            analysisResults.innerHTML = '<div class="loading">Analyzing student data, please wait...</div>';
+            
+            // Generate sample performance data
+            // In a real implementation, you would fetch this from your database
+            const performanceData = {
+                assignments: [
+                    { name: 'Assignment 1', score: 85, maxScore: 100 },
+                    { name: 'Assignment 2', score: 92, maxScore: 100 },
+                    { name: 'Mid-term', score: 78, maxScore: 100 }
+                ],
+                attendance: 85, // percentage
+                participationRate: 70, // percentage
+                lastLogin: '2023-05-02', // example date
+                completedTasks: 24,
+                totalTasks: 30
+            };
+            
+            // Send to server for AI analysis
+            fetch('/ai/proctor/analyze-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    studentId, 
+                    performanceData 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.analysis) {
+                    analysisResults.textContent = data.analysis;
+                } else if (data.error) {
+                    analysisResults.innerHTML = `<div class="error">Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                analysisResults.innerHTML = '<div class="error">Failed to analyze student data. Please try again later.</div>';
+            });
+        }
+    </script>
+</body>
+</html>

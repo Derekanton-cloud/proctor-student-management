@@ -33,6 +33,9 @@ exports.getDashboard = async (req, res) => {
     }
 };
 
+exports.aiAssistant = (req, res) => {
+    res.redirect('/ai/student/assistant');
+};
 
 // Function to view assignments
 exports.viewAssignments = async (req, res) => {

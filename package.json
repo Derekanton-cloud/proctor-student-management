@@ -8,6 +8,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@huggingface/inference": "^3.11.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -15,6 +16,7 @@
     "dotenv": "^10.0.0",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
     "express-session": "^1.18.1",
     "express-validator": "^6.15.0",
     "jsonwebtoken": "^8.5.1",

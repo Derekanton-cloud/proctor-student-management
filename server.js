@@ -4,6 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const dotenv = require('dotenv');
+const aiRoutes = require('./src/routes/aiRoutes');
 const db = require('./src/config/db');
 const sequelize = require('./src/config/sequelize'); 
 const Student = require('./src/models/studentModel'); 
@@ -50,6 +51,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/student', studentRoutes);
 app.use('/proctor', proctorRoutes);
+app.use('/ai', aiRoutes);
 
 // Start server
 app.listen(PORT, () => {

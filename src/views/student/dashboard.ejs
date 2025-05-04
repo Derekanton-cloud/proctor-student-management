@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #FFDAB9; /* Peach background */
+            background-color: #FFDAB9;
+            /* Peach background */
             margin: 0;
             padding: 0;
         }
-        
+
         .dashboard-container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -21,63 +25,249 @@
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(139, 0, 0, 0.1);
         }
-        
+
         .welcome-header {
-            color: #800000; /* Maroon text */
+            color: #800000;
+            /* Maroon text */
             border-bottom: 2px solid #FFDAB9;
             padding-bottom: 1rem;
             margin-bottom: 2rem;
         }
-        
+
         .dashboard-widgets {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
         }
-        
+
         .widget {
             background-color: #FFF8EE;
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(139, 0, 0, 0.08);
+            margin-top: 30px;
         }
-        
+
         .widget h3 {
             color: #800000;
             margin-top: 0;
             border-bottom: 1px solid #FFE4B5;
             padding-bottom: 0.5rem;
         }
+
+        .ai-widget {
+            background: linear-gradient(to bottom right, #FFF8EE, #FFEFD5);
+            border-left: 4px solid #800000;
+        }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #FFE4B5;
+        }
+
+        .widget-header h3 {
+            margin: 0;
+            color: #800000;
+            font-size: 1.2rem;
+        }
+
+        .widget-header i {
+            margin-right: 8px;
+            color: #800000;
+        }
+
+        .widget-content {
+            padding: 15px 0;
+        }
+
+        .widget-content p {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .ai-features {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            gap: 10px;
+        }
+
+        .ai-feature {
+            background-color: rgba(255, 218, 185, 0.5);
+            border-radius: 15px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            color: #800000;
+        }
+
+        .ai-feature i {
+            margin-right: 5px;
+            color: #800000;
+        }
+
+        .quick-question-form {
+            display: flex;
+            margin: 15px 0;
+            gap: 5px;
+        }
+
+        .quick-question-form input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid #FFDAB9;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .quick-question-form button {
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .quick-answer {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border-left: 3px solid #800000;
+            font-size: 0.9rem;
+            max-height: 100px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .ai-button {
+            display: block;
+            text-align: center;
+            background-color: #800000;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .ai-button:hover {
+            background-color: #990000;
+            text-decoration: none;
+            color: white;
+        }
+
+        .ai-button i {
+            margin-right: 5px;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 <body>
     <div class="dashboard-container">
         <div class="welcome-header">
             <h1>Student Dashboard</h1>
             <p>Welcome, <%= user.name %>!</p>
         </div>
-        
+
         <div class="dashboard-widgets">
             <div class="widget">
                 <h3>Your Profile</h3>
-                <p><strong>Email:</strong> <%= user.email %></p>
-                <p><strong>Role:</strong> <%= user.role %></p>
+                <p><strong>Email:</strong>
+                    <%= user.email %>
+                </p>
+                <p><strong>Role:</strong>
+                    <%= user.role %>
+                </p>
                 <!-- Add more profile details as needed -->
                 <a href="/student/profile">Edit Profile</a>
             </div>
-            
+
             <div class="widget">
                 <h3>Your Assignments</h3>
                 <p>You have 0 pending assignments</p>
                 <a href="/student/assignments">View All Assignments</a>
             </div>
-            
+
             <div class="widget">
                 <h3>Recent Performance</h3>
                 <p>No performance data available</p>
                 <a href="/student/performance">View Performance Details</a>
             </div>
         </div>
+        <div class="widget ai-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-robot"></i> AI Study Assistant</h3>
+            </div>
+            <div class="widget-content">
+                <p>Get instant help with your studies using our AI assistant.</p>
+                <div class="ai-features">
+                    <span class="ai-feature"><i class="fas fa-check"></i> Homework help</span>
+                    <span class="ai-feature"><i class="fas fa-check"></i> Concept explanations</span>
+                    <span class="ai-feature"><i class="fas fa-check"></i> Study tips</span>
+                </div>
+                <div class="quick-question-form">
+                    <input type="text" id="quick-question" placeholder="Ask a quick question...">
+                    <button onclick="askQuickQuestion()">Ask</button>
+                </div>
+                <div id="quick-answer" class="quick-answer"></div>
+                <a href="/ai/student/assistant" class="ai-button">
+                    <i class="fas fa-comment-dots"></i> Open Full AI Assistant
+                </a>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Quick Question functionality
+        function askQuickQuestion() {
+            const question = document.getElementById('quick-question').value;
+            const answerBox = document.getElementById('quick-answer');
+
+            if (!question.trim()) return;
+
+            // Show loading state
+            answerBox.style.display = 'block';
+            answerBox.textContent = 'Thinking...';
+
+            // Call the AI API
+            fetch('/ai/student/assistant/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    question: question,
+                    subject: 'general'
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.answer) {
+                        answerBox.textContent = data.answer;
+                    } else {
+                        answerBox.textContent = 'Sorry, I couldn\'t process that question. Please try the full AI Assistant.';
+                    }
+                })
+                .catch(error => {
+                    answerBox.textContent = 'An error occurred. Please try again.';
+                    console.error('Error:', error);
+                });
+        }
+
+        // Allow pressing Enter to submit question
+        document.getElementById('quick-question')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                askQuickQuestion();
+            }
+        });
+    </script>
 </body>
+
 </html>
