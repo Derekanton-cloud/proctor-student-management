@@ -65,4 +65,7 @@ router.get('/api/proctor/students', isAuthenticated, isProctor, async (req, res)
     }
 });
 
+router.post('/assign-student', isAuthenticated, isProctor, proctorController.assignStudent);
+router.get('/unassigned-students', isAuthenticated, isProctor, proctorController.getUnassignedStudents);
+
 module.exports = router;

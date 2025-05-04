@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Student</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #FFDAB9;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(139, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #800000;
+            border-bottom: 2px solid #FFDAB9;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #FFE4B5;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .proctor-info {
+            background-color: #FFF8EE;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #800000;
+            margin-bottom: 20px;
+        }
+        
+        .proctor-info p {
+            margin: 5px 0;
+        }
+        
+        .btn-primary {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background-color: #990000;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .form-actions {
+            margin-top: 2rem;
+            display: flex;
+        }
+        
+        .required {
+            color: #800000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Your Profile</h1>
+        
+        <% if (locals.success) { %>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
+        <% } %>
+        
+        <% if (locals.error) { %>
+            <div class="alert alert-danger">
+                <%= error %>
+            </div>
+        <% } %>
+        
+        <form action="/student/profile/update" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" value="<%= user.email %>" readonly>
+                <small>Email cannot be changed</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="batch">Batch <span class="required">*</span></label>
+                <input type="text" class="form-control" id="batch" name="batch" 
+                       value="<%= user.batch || '' %>" required 
+                       placeholder="e.g., 2022-2026">
+            </div>
+            
+            <div class="form-group">
+                <label for="current_semester">Current Semester <span class="required">*</span></label>
+                <select class="form-control" id="current_semester" name="current_semester" required>
+                    <option value="">Select Semester</option>
+                    <% for(let i=1; i<=8; i++) { %>
+                        <option value="<%= i %>" <%= (user.current_semester == i) ? 'selected' : '' %>>
+                            Semester <%= i %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="section">Section <span class="required">*</span></label>
+                <input type="text" class="form-control" id="section" name="section" 
+                       value="<%= user.section || '' %>" required 
+                       placeholder="e.g., A, B, C">
+            </div>
+            
+            <div class="form-group">
+                <label for="roll_number">Class Roll Number <span class="required">*</span></label>
+                <input type="text" class="form-control" id="roll_number" name="roll_number" 
+                       value="<%= user.roll_number || '' %>" required 
+                       placeholder="e.g., 21CS101">
+            </div>
+            
+            <% if (user.proctor_id && user.proctor_name) { %>
+                <div class="proctor-info">
+                    <h3>Assigned Proctor</h3>
+                    <p><strong>Name:</strong> <%= user.proctor_name %></p>
+                    <p><small>Your proctor assignment can only be changed by the proctor or an administrator.</small></p>
+                </div>
+            <% } else { %>
+                <div class="proctor-info">
+                    <h3>No Proctor Assigned</h3>
+                    <p>You haven't been assigned a proctor yet. Once assigned, their details will appear here.</p>
+                </div>
+            <% } %>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Save Changes</button>
+                <a href="/student/dashboard" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

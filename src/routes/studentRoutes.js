@@ -69,4 +69,10 @@ router.post('/assignments/submit', studentController.submitAssignment);
 // Route to view performance metrics
 router.get('/performance', studentController.viewPerformance);
 
+router.post('/api/performance', isAuthenticated, isStudent, studentController.savePerformanceData);
+router.get('/api/performance', isAuthenticated, isStudent, studentController.getPerformanceData);
+
+router.get('/profile', isAuthenticated, isStudent, studentController.getProfile);
+router.post('/profile/update', isAuthenticated, isStudent, studentController.updateProfile);
+
 module.exports = router;

@@ -60,3 +60,62 @@ exports.writeRemarks = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 };
+
+
+exports.assignStudent = async (req, res) => {
+    try {
+        const { studentId } = req.body;
+        const proctorId = req.session.user.id;
+        
+        // Check if student exists and is not already assigned
+        const studentCheck = await db.query(
+            'SELECT * FROM users WHERE id = $1 AND role = $2',
+            [studentId, 'student']
+        );
+        
+        if (studentCheck.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+        
+        // Update the student's proctor_id
+        await db.query(
+            'UPDATE users SET proctor_id = $1 WHERE id = $2',
+            [proctorId, studentId]
+        );
+        
+        res.json({
+            success: true,
+            message: 'Student successfully assigned to you'
+        });
+    } catch (error) {
+        console.error('Error assigning student:', error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while assigning the student'
+        });
+    }
+};
+
+// Get unassigned students
+exports.getUnassignedStudents = async (req, res) => {
+    try {
+        const unassignedStudents = await db.query(
+            'SELECT id, name, email, batch, current_semester, section, roll_number FROM users WHERE role = $1 AND proctor_id IS NULL',
+            ['student']
+        );
+        
+        res.json({
+            success: true,
+            students: unassignedStudents.rows
+        });
+    } catch (error) {
+        console.error('Error getting unassigned students:', error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while getting unassigned students'
+        });
+    }
+};
