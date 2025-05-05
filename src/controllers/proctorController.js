@@ -119,3 +119,24 @@ exports.getUnassignedStudents = async (req, res) => {
         });
     }
 };
+
+// Add this method to your controller
+exports.getStudentsAPI = async (req, res) => {
+    try {
+        const proctorId = req.session.user.id;
+        
+        // Query to get students assigned to this proctor
+        const students = await db.query(
+            'SELECT id, name FROM users WHERE role = $1',
+            ['student']
+        );
+        
+        res.json({ students: students.rows });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ 
+            error: 'Failed to fetch students',
+            message: error.message
+        });
+    }
+};
