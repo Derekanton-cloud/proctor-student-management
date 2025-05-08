@@ -159,15 +159,137 @@
             font-weight: 500;
             transition: background-color 0.2s;
         }
-        
+
         .ai-button:hover {
             background-color: #990000;
             text-decoration: none;
             color: white;
         }
-        
+
         .ai-button i {
             margin-right: 5px;
+        }
+
+        .student-list {
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border-left: 3px solid #800000;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .remove-btn {
+            background-color: #d32f2f;
+        }
+
+        .view-btn {
+            background-color: #1976d2;
+        }
+
+        .assign-btn {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .view-all-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #800000;
+            text-decoration: underline;
+        }
+
+        .assign-new-student {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #FFE4B5;
+        }
+
+        .assign-new-student h4 {
+            color: #800000;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        /* Performance modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #FFF8EE;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 16px rgba(139, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            color: #800000;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .performance-data {
+            margin-top: 20px;
+        }
+
+        .semester-performance {
+            margin-bottom: 20px;
+        }
+
+        .semester-header {
+            background-color: #800000;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .subject-list {
+            margin-left: 15px;
+        }
+
+        subject-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #FFE4B5;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -194,8 +316,21 @@
 
             <div class="widget">
                 <h3>Assigned Students</h3>
-                <p>You have 0 students assigned</p>
-                <a href="/proctor/students">View All Students</a>
+                <div id="assigned-students-count">Loading assigned students...</div>
+
+                <!-- List of currently assigned students -->
+                <div class="student-list" id="assigned-students-list"></div>
+
+                <!-- Assign new student section -->
+                <div class="assign-new-student">
+                    <h4>Assign New Student</h4>
+                    <select id="unassigned-student-select" class="student-select">
+                        <option value="">Select a student to assign...</option>
+                    </select>
+                    <button onclick="assignStudent()" class="action-btn assign-btn">Assign Student</button>
+                </div>
+
+                <a href="/proctor/students" class="view-all-link">View All Students</a>
             </div>
 
             <div class="widget">
@@ -211,13 +346,13 @@
             </div>
             <div class="widget-content">
                 <p>Use AI to gain insights into student performance and provide better guidance.</p>
-                
+
                 <div class="ai-features">
                     <span class="ai-feature"><i class="fas fa-brain"></i> Performance insights</span>
                     <span class="ai-feature"><i class="fas fa-search"></i> Pattern detection</span>
                     <span class="ai-feature"><i class="fas fa-lightbulb"></i> Custom recommendations</span>
                 </div>
-                
+
                 <div class="recent-students">
                     <h4>Quick Analysis</h4>
                     <select id="student-select" class="student-select">
@@ -226,22 +361,33 @@
                     </select>
                     <button onclick="quickAnalyze()" class="analyze-btn">Analyze</button>
                 </div>
-                
+
                 <div id="analysis-preview" class="analysis-preview"></div>
-                
+
                 <a href="/ai/proctor/analysis" class="ai-button">
                     <i class="fas fa-chart-pie"></i> Open Full AI Analysis
                 </a>
             </div>
         </div>
-        
+
+    </div>
+
+    <!-- Add this modal for showing student performance -->
+    <div id="performance-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePerformanceModal()">&times;</span>
+            <h3 id="modal-student-name">Student Performance</h3>
+            <div id="performance-data" class="performance-data">
+                <p>Loading performance data...</p>
+            </div>
+        </div>
     </div>
 
     <script>
         // Function to populate student dropdown
         function loadStudents() {
             const select = document.getElementById('student-select');
-            
+
             // Make API request to get your students
             fetch('/proctor/api/proctor/students')
                 .then(response => response.json())
@@ -263,7 +409,7 @@
                         { id: 2, name: 'Jane Smith' },
                         { id: 3, name: 'Alex Johnson' }
                     ];
-                    
+
                     sampleStudents.forEach(student => {
                         const option = document.createElement('option');
                         option.value = student.id;
@@ -271,48 +417,48 @@
                         select.appendChild(option);
                     });
                 });
+        }
+
+        // Function to analyze selected student
+        function quickAnalyze() {
+            const studentId = document.getElementById('student-select').value;
+            const analysisBox = document.getElementById('analysis-preview');
+
+            if (!studentId) {
+                alert('Please select a student first');
+                return;
             }
-            
-            // Function to analyze selected student
-            function quickAnalyze() {
-                const studentId = document.getElementById('student-select').value;
-                const analysisBox = document.getElementById('analysis-preview');
-                
-                if (!studentId) {
-                    alert('Please select a student first');
-                    return;
-                }
-                
-                // Show loading state
-                analysisBox.style.display = 'block';
-                analysisBox.textContent = 'Analyzing student data...';
-                
-                // Create sample performance data - in production this would come from your database
-                const performanceData = {
-                    assignments: [
-                        { name: 'Assignment 1', score: 85, maxScore: 100 },
-                        { name: 'Assignment 2', score: 92, maxScore: 100 }
-                    ],
-                    attendance: 90,
-                    participationRate: 75
-                };
-                
-                // Call the AI API
-                fetch('/ai/proctor/analyze-student', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        studentId: studentId,
-                        performanceData: performanceData
-                    })
+
+            // Show loading state
+            analysisBox.style.display = 'block';
+            analysisBox.textContent = 'Analyzing student data...';
+
+            // Create sample performance data - in production this would come from your database
+            const performanceData = {
+                assignments: [
+                    { name: 'Assignment 1', score: 85, maxScore: 100 },
+                    { name: 'Assignment 2', score: 92, maxScore: 100 }
+                ],
+                attendance: 90,
+                participationRate: 75
+            };
+
+            // Call the AI API
+            fetch('/ai/proctor/analyze-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    studentId: studentId,
+                    performanceData: performanceData
                 })
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.analysis) {
                         // Show preview of analysis
-                        const previewText = data.analysis.substring(0, 200) + 
+                        const previewText = data.analysis.substring(0, 200) +
                             (data.analysis.length > 200 ? '... (see full analysis)' : '');
                         analysisBox.textContent = previewText;
                     } else {
@@ -323,11 +469,341 @@
                     console.error('Error:', error);
                     analysisBox.textContent = 'Error generating analysis. Please try again later.';
                 });
+        }
+
+        // Load students when the page loads
+        document.addEventListener('DOMContentLoaded', loadStudents);
+    </script>
+
+    <script>
+        // Global variables to store student data
+        let assignedStudents = [];
+        let unassignedStudents = [];
+
+        // Load assigned and unassigned students when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAssignedStudents();
+            loadUnassignedStudents();
+            loadStudents(); // Keep the original function for the AI analysis section
+        });
+
+        // Function to load assigned students
+        function loadAssignedStudents() {
+            fetch('/proctor/api/assigned-students')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.students) {
+                        assignedStudents = data.students;
+                        displayAssignedStudents();
+                    } else {
+                        console.error('Error loading assigned students:', data.message);
+                        document.getElementById('assigned-students-count').textContent =
+                            'You have 0 students assigned';
+                        document.getElementById('assigned-students-list').innerHTML =
+                            '<p class="empty-list">No students assigned yet.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching assigned students:', error);
+                    document.getElementById('assigned-students-count').textContent =
+                        'Error loading students';
+
+                    // For development/testing - display sample data
+                    assignedStudents = [
+                        { id: 101, name: 'John Smith', batch: '2022', section: 'A' },
+                        { id: 102, name: 'Maria Garcia', batch: '2022', section: 'B' }
+                    ];
+                    displayAssignedStudents();
+                });
+        }
+
+        // Function to display assigned students
+        function displayAssignedStudents() {
+            const listElement = document.getElementById('assigned-students-list');
+            const countElement = document.getElementById('assigned-students-count');
+
+            countElement.textContent = `You have ${assignedStudents.length} student${assignedStudents.length !== 1 ? 's' : ''} assigned`;
+
+            if (assignedStudents.length === 0) {
+                listElement.innerHTML = '<p class="empty-list">No students assigned yet.</p>';
+                return;
             }
-            
-            // Load students when the page loads
-            document.addEventListener('DOMContentLoaded', loadStudents);
-            </script>
+
+            listElement.innerHTML = '';
+            assignedStudents.forEach(student => {
+                const studentItem = document.createElement('div');
+                studentItem.className = 'student-item';
+                studentItem.innerHTML = `
+                <div class="student-info">${student.name}${student.batch ? ` - ${student.batch}` : ''}${student.section ? ` ${student.section}` : ''}</div>
+                <div class="student-actions">
+                    <button onclick="viewStudentPerformance(${student.id}, '${student.name}')" class="action-btn view-btn">
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                    <button onclick="removeStudent(${student.id})" class="action-btn remove-btn">
+                        <i class="fas fa-user-minus"></i>
+                    </button>
+                </div>
+            `;
+                listElement.appendChild(studentItem);
+            });
+        }
+
+        // Function to load unassigned students
+        // Replace or modify your loadUnassignedStudents function
+        function loadUnassignedStudents() {
+            console.log('Fetching unassigned students...');
+            fetch('/proctor/api/unassigned-students')
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Unassigned students data:', data);
+                    if (data.success && data.students) {
+                        unassignedStudents = data.students;
+                        populateUnassignedStudentsDropdown();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading unassigned students:', error);
+                    // For development/testing - display sample data
+                    unassignedStudents = [
+                        { id: 201, name: 'Alex Wong' },
+                        { id: 202, name: 'Sara Johnson' },
+                        { id: 203, name: 'James Lee' }
+                    ];
+                    populateUnassignedStudentsDropdown();
+                });
+        }
+
+        // Function to populate the unassigned students dropdown
+        function populateUnassignedStudentsDropdown() {
+            const select = document.getElementById('unassigned-student-select');
+
+            // Clear options except first one
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+
+            // Add options for each unassigned student
+            unassignedStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = student.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Function to assign a student
+        function assignStudent() {
+            const select = document.getElementById('unassigned-student-select');
+            const studentId = select.value;
+
+            if (!studentId) {
+                alert('Please select a student to assign');
+                return;
+            }
+
+            // Send request to assign student
+            fetch('/proctor/assign-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ studentId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Find the student in unassigned list
+                        const student = unassignedStudents.find(s => s.id == studentId);
+                        // Remove from unassigned and add to assigned
+                        unassignedStudents = unassignedStudents.filter(s => s.id != studentId);
+                        assignedStudents.push(student);
+
+                        // Update UI
+                        populateUnassignedStudentsDropdown();
+                        displayAssignedStudents();
+
+                        // Reset select
+                        select.value = '';
+
+                        alert('Student assigned successfully!');
+                    } else {
+                        alert('Error assigning student: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                    // For development/testing - simulate successful assignment
+                    const student = unassignedStudents.find(s => s.id == studentId);
+                    unassignedStudents = unassignedStudents.filter(s => s.id != studentId);
+                    assignedStudents.push(student);
+                    populateUnassignedStudentsDropdown();
+                    displayAssignedStudents();
+                    select.value = '';
+                });
+        }
+
+        // Function to remove an assigned student
+        function removeStudent(studentId) {
+            if (!confirm('Are you sure you want to remove this student from your assignments?')) {
+                return;
+            }
+
+            fetch('/proctor/remove-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ studentId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Find student in assigned list
+                        const student = assignedStudents.find(s => s.id == studentId);
+                        // Remove from assigned and add to unassigned
+                        assignedStudents = assignedStudents.filter(s => s.id != studentId);
+                        unassignedStudents.push(student);
+
+                        // Update UI
+                        populateUnassignedStudentsDropdown();
+                        displayAssignedStudents();
+
+                        alert('Student removed successfully!');
+                    } else {
+                        alert('Error removing student: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                    // For development/testing - simulate successful removal
+                    const student = assignedStudents.find(s => s.id == studentId);
+                    assignedStudents = assignedStudents.filter(s => s.id != studentId);
+                    unassignedStudents.push(student);
+                    populateUnassignedStudentsDropdown();
+                    displayAssignedStudents();
+                });
+        }
+
+        // Replace the displayPerformanceData function
+        function displayPerformanceData(performance, container) {
+            if (!performance.semesters || performance.semesters.length === 0) {
+                container.innerHTML = '<p>No academic performance data has been uploaded by this student yet.</p>';
+                return;
+            }
+
+            let html = '';
+
+            // Display student name in the modal
+            if (performance.studentName) {
+                html = `<h4>${performance.studentName}'s Performance</h4>`;
+            }
+
+            performance.semesters.forEach(semester => {
+                html += `
+            <div class="semester-performance">
+                <div class="semester-header">${semester.name} - CGPA: ${semester.cgpa}</div>
+                <div class="subject-list">
+        `;
+
+                if (semester.subjects && semester.subjects.length > 0) {
+                    // Group subjects by exam type for better organization
+                    const examTypes = new Set(semester.subjects.map(s => s.examType));
+
+                    examTypes.forEach(examType => {
+                        html += `<div class="exam-type"><strong>${examType || 'General'}</strong></div>`;
+
+                        // Get subjects for this exam type
+                        const examSubjects = semester.subjects.filter(s => s.examType === examType);
+
+                        examSubjects.forEach(subject => {
+                            const percentage = (subject.marks / subject.maxMarks) * 100;
+                            html += `
+                        <div class="subject-item">
+                            <span>${subject.name}</span>
+                            <span>${subject.marks}/${subject.maxMarks} (${percentage.toFixed(1)}%)</span>
+                        </div>
+                    `;
+                        });
+
+                        html += `<hr class="subject-divider">`;
+                    });
+                } else {
+                    html += `<p>No subject data available for this semester</p>`;
+                }
+
+                html += `
+                </div>
+            </div>
+        `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Function to view student performance
+        function viewStudentPerformance(studentId, studentName) {
+            const modal = document.getElementById('performance-modal');
+            const modalTitle = document.getElementById('modal-student-name');
+            const performanceData = document.getElementById('performance-data');
+
+            modalTitle.textContent = `${studentName}'s Performance`;
+            performanceData.innerHTML = '<p>Loading performance data...</p>';
+            modal.style.display = 'block';
+
+            // Fetch performance data for this student
+            fetch(`/proctor/student-performance/${studentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.performance) {
+                        displayPerformanceData(data.performance, performanceData);
+                    } else {
+                        performanceData.innerHTML = '<p>No performance data available for this student.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching performance data:', error);
+
+                    // For development/testing - display sample data
+                    const samplePerformance = {
+                        semesters: [
+                            {
+                                name: 'Semester 1',
+                                subjects: [
+                                    { name: 'Mathematics', marks: 85, maxMarks: 100 },
+                                    { name: 'Physics', marks: 78, maxMarks: 100 },
+                                    { name: 'Chemistry', marks: 92, maxMarks: 100 }
+                                ],
+                                cgpa: 8.5
+                            },
+                            {
+                                name: 'Semester 2',
+                                subjects: [
+                                    { name: 'Data Structures', marks: 88, maxMarks: 100 },
+                                    { name: 'Database Systems', marks: 75, maxMarks: 100 },
+                                    { name: 'Computer Networks', marks: 82, maxMarks: 100 }
+                                ],
+                                cgpa: 8.2
+                            }
+                        ]
+                    };
+
+                    displayPerformanceData(samplePerformance, performanceData);
+                });
+        }
+
+        // Function to close the performance modal
+        function closePerformanceModal() {
+            document.getElementById('performance-modal').style.display = 'none';
+        }
+    </script>
 
 </body>
 
