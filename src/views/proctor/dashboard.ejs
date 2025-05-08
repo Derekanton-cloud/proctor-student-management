@@ -39,6 +39,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
+            margin-top: -30px;
         }
 
         .widget {
@@ -171,20 +172,39 @@
         }
 
         .student-list {
-            margin: 15px 0;
-            max-height: 200px;
+            margin: 10px 0;
+            max-height: 300px;
             overflow-y: auto;
+            list-style-type: none;
+            padding: 0;
         }
 
         .student-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px;
+            padding: 10px;
             margin-bottom: 8px;
-            background-color: white;
-            border-radius: 4px;
+            background-color: #FFF8EE;
+            border-radius: 5px;
             border-left: 3px solid #800000;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        student-link {
+            cursor: pointer;
+            color: #800000;
+            font-weight: 500;
+        }
+
+        .student-link:hover {
+            text-decoration: underline;
+        }
+
+        .student-details {
+            font-size: 0.85rem;
+            color: #666;
+            margin-left: 5px;
         }
 
         .student-actions {
@@ -285,11 +305,438 @@
             margin-left: 15px;
         }
 
+        .announcements {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .announcement-item {
+            background-color: #fff;
+            border-left: 4px solid #8B0000;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .announcement-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #8B0000;
+        }
+
+        .announcement-date {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .announcement-content {
+            color: #333;
+            margin-bottom: 10px;
+            white-space: pre-line;
+        }
+
+        .announcement-footer {
+            font-size: 14px;
+            color: #555;
+            text-align: right;
+        }
+
+        .announcement-form {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #fffaf5;
+            border-radius: 8px;
+            border: 1px solid #FFE4B5;
+            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.05);
+        }
+
+        .announcement-form h4 {
+            margin-bottom: 20px;
+            color: #8B0000;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #FFE4B5;
+            padding-bottom: 10px;
+        }
+
+        .announcement-widget {
+            border-left: 4px solid #800000;
+        }
+
+        .announcement-form .form-group {
+            margin-bottom: 18px;
+        }
+
+        .announcement-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #5a0000;
+        }
+
+        .announcement-form .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #FFDAB9;
+            border-radius: 6px;
+            background-color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .announcement-form .form-control:focus {
+            border-color: #8B0000;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1);
+        }
+
+        .announcement-form textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .announcement-form .form-actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .announcement-form .action-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .announcement-form .action-btn:hover {
+            background-color: #990000;
+        }
+
+        .announcement-form .action-btn i {
+            margin-right: 8px;
+        }
+
         subject-item {
             display: flex;
             justify-content: space-between;
             padding: 5px 0;
             border-bottom: 1px solid #FFE4B5;
+        }
+
+        /* Student Profile Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.2);
+            animation: modalFade 0.3s ease;
+        }
+
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: #800000;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #d00000;
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, #800000, #A52A2A);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Student Profile Layout */
+        .student-profile-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .student-details {
+            flex: 1;
+            background-color: #FFF8EE;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #800000;
+        }
+
+        .student-academic {
+            flex: 1;
+            background-color: #FFF8EE;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #800000;
+        }
+
+        .profile-item {
+            margin: 12px 0;
+            display: flex;
+            border-bottom: 1px dashed #FFE4B5;
+            padding-bottom: 8px;
+        }
+
+        .profile-label {
+            width: 150px;
+            color: #800000;
+            font-weight: 600;
+        }
+
+        .profile-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .academic-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 45%;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #800000;
+        }
+
+        .stat-label {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .academic-chart-container {
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        /* Proctor Notes Section */
+        .proctor-notes-section {
+            background-color: #FFF8EE;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #800000;
+        }
+
+        .notes-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #FFE4B5;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .notes-form button {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .notes-form button:hover {
+            background-color: #a52a2a;
+        }
+
+        .notes-history {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .note-entry {
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-left: 3px solid #800000;
+        }
+
+        .note-date {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .note-text {
+            color: #333;
+        }
+
+        /* Make Student Names Clickable */
+        .student-link {
+            cursor: pointer;
+            color: #800000;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+
+        .student-link:hover {
+            color: #a52a2a;
+            text-decoration: underline;
+        }
+
+        /* Action buttons next to student names */
+        .student-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Add these styles to your existing CSS */
+        .semester-tabs {
+            margin-top: 20px;
+            border-bottom: 1px solid #FFE4B5;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            background-color: #f1f1f1;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 4px 4px 0 0;
+            transition: 0.3s;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .tab-btn.active {
+            background-color: #800000;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 15px;
+            border: 1px solid #FFE4B5;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .marks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .marks-table th,
+        .marks-table td {
+            border: 1px solid #FFE4B5;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        .marks-table th {
+            background-color: #FFF8EE;
+            color: #800000;
+        }
+
+        .marks-table tr:nth-child(even) {
+            background-color: #FFF8EE;
+        }
+
+        .exam-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #FFE4B5;
+        }
+
+        .exam-section h5 {
+            color: #800000;
+            margin: 0 0 10px 0;
+        }
+
+        .semester-performance h4 {
+            color: #800000;
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid #FFE4B5;
+            padding-bottom: 5px;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -316,16 +763,55 @@
 
             <div class="widget">
                 <h3>Assigned Students</h3>
-                <div id="assigned-students-count">Loading assigned students...</div>
 
-                <!-- List of currently assigned students -->
-                <div class="student-list" id="assigned-students-list"></div>
+                <!-- Student list with EJS templating -->
+                <div class="assigned-students-list">
+                    <% if (students && students.length> 0) { %>
+                        <p>You have <%= students.length %> student<%= students.length> 1 ? 's' : '' %> assigned</p>
+                        <ul class="students-list">
+                            <% students.forEach(student=> { %>
+                                <li class="student-item">
+                                    <div class="student-info">
+                                        <a class="student-link" onclick="viewStudentProfile('<%= student.id %>')">
+                                            <%= student.name %>
+                                        </a>
+                                        <% if (student.batch || student.section) { %>
+                                            <span class="student-details">
+                                                <%= student.batch ? student.batch : '' %>
+                                                    <%= student.section ? student.section : '' %>
+                                            </span>
+                                            <% } %>
+                                    </div>
+                                    <div class="student-actions">
+                                        <button class="action-btn view-btn"
+                                            onclick="viewStudentProfile('<%= student.id %>')">
+                                            <i class="fas fa-user"></i>
+                                        </button>
+                                        <button class="action-btn remove-btn"
+                                            onclick="removeStudent('<%= student.id %>')">
+                                            <i class="fas fa-user-minus"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                                <% }); %>
+                        </ul>
+                        <% } else { %>
+                            <p>You have no students assigned</p>
+                            <% } %>
+                </div>
 
                 <!-- Assign new student section -->
                 <div class="assign-new-student">
                     <h4>Assign New Student</h4>
                     <select id="unassigned-student-select" class="student-select">
                         <option value="">Select a student to assign...</option>
+                        <% if (unassignedStudents && unassignedStudents.length> 0) { %>
+                            <% unassignedStudents.forEach(student=> { %>
+                                <option value="<%= student.id %>">
+                                    <%= student.name %>
+                                </option>
+                                <% }); %>
+                                    <% } %>
                     </select>
                     <button onclick="assignStudent()" class="action-btn assign-btn">Assign Student</button>
                 </div>
@@ -333,10 +819,33 @@
                 <a href="/proctor/students" class="view-all-link">View All Students</a>
             </div>
 
-            <div class="widget">
-                <h3>Recent Activities</h3>
-                <p>No recent activities</p>
-                <a href="/proctor/activities">View All Activities</a>
+
+            <div class="widget announcement-widget">
+                <h3>Announcements</h3>
+                <div id="announcements-list">
+                    <p>Loading announcements...</p>
+                </div>
+
+                <div class="announcement-form">
+                    <h4>Create New Announcement</h4>
+                    <form id="announcement-form">
+                        <div class="form-group">
+                            <label for="announcement-title">Title:</label>
+                            <input type="text" id="announcement-title" class="form-control"
+                                placeholder="Enter announcement title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="announcement-content">Message:</label>
+                            <textarea id="announcement-content" class="form-control" rows="4"
+                                placeholder="Enter your announcement message here..." required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="action-btn">
+                                <i class="fas fa-paper-plane"></i> Send Announcement
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -383,11 +892,107 @@
         </div>
     </div>
 
+    <!-- Student Profile Modal -->
+    <div id="student-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2 id="student-name">Student Profile</h2>
+            </div>
+            <div class="modal-body">
+                <div class="student-profile-container">
+                    <!-- Left Column: Student Details -->
+                    <div class="student-details">
+                        <h3>Personal Information</h3>
+                        <div class="profile-item">
+                            <span class="profile-label">Email:</span>
+                            <span id="student-email" class="profile-value"></span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Batch:</span>
+                            <span id="student-batch" class="profile-value"></span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Current Semester:</span>
+                            <span id="student-semester" class="profile-value"></span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Section:</span>
+                            <span id="student-section" class="profile-value"></span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">USN:</span>
+                            <span id="student-usn" class="profile-value"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Academic Summary -->
+                    <div class="student-academic">
+                        <h3>Academic Summary</h3>
+                        <div class="academic-chart-container">
+                            <canvas id="student-cgpa-chart"></canvas>
+                        </div>
+                        <div class="academic-stats">
+                            <div class="stat-box">
+                                <span class="stat-value" id="student-cgpa">--</span>
+                                <span class="stat-label">Current CGPA</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-value" id="student-attendance">--</span>
+                                <span class="stat-label">Attendance %</span>
+                            </div>
+                        </div>
+
+                        <!-- New section to show subject-wise performance -->
+                        <div class="semester-performance">
+                            <h4>Subject Performance</h4>
+                            <div id="no-performance-data" style="display:none;">
+                                <p>No performance data available for this student yet.</p>
+                            </div>
+                            <div id="semester-tabs" class="semester-tabs"></div>
+                            <div id="semester-content" class="semester-content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proctor Notes Section -->
+                <div class="proctor-notes-section">
+                    <h3>Proctor Notes</h3>
+                    <div class="notes-form">
+                        <textarea id="proctor-notes" placeholder="Add notes about this student..."></textarea>
+                        <button id="save-notes" class="action-btn">Save Notes</button>
+                    </div>
+                    <div id="saved-notes-history" class="notes-history">
+                        <!-- Notes history will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Function to safely get DOM element
+        function getElement(id) {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.warn(`Element with ID '${id}' not found`);
+            }
+            return element;
+        }
+    
+        // Function to safely set text content
+        function setTextContent(id, text) {
+            const element = getElement(id);
+            if (element) {
+                element.textContent = text || '--';
+            }
+        }
+    
         // Function to populate student dropdown
         function loadStudents() {
-            const select = document.getElementById('student-select');
-
+            const select = getElement('student-select');
+            if (!select) return;
+    
             // Make API request to get your students
             fetch('/proctor/api/proctor/students')
                 .then(response => response.json())
@@ -409,7 +1014,7 @@
                         { id: 2, name: 'Jane Smith' },
                         { id: 3, name: 'Alex Johnson' }
                     ];
-
+    
                     sampleStudents.forEach(student => {
                         const option = document.createElement('option');
                         option.value = student.id;
@@ -418,21 +1023,25 @@
                     });
                 });
         }
-
+    
         // Function to analyze selected student
         function quickAnalyze() {
-            const studentId = document.getElementById('student-select').value;
-            const analysisBox = document.getElementById('analysis-preview');
-
+            const selectElement = getElement('student-select');
+            const analysisBox = getElement('analysis-preview');
+            
+            if (!selectElement || !analysisBox) return;
+            
+            const studentId = selectElement.value;
+    
             if (!studentId) {
                 alert('Please select a student first');
                 return;
             }
-
+    
             // Show loading state
             analysisBox.style.display = 'block';
             analysisBox.textContent = 'Analyzing student data...';
-
+    
             // Create sample performance data - in production this would come from your database
             const performanceData = {
                 assignments: [
@@ -442,7 +1051,7 @@
                 attendance: 90,
                 participationRate: 75
             };
-
+    
             // Call the AI API
             fetch('/ai/proctor/analyze-student', {
                 method: 'POST',
@@ -470,23 +1079,24 @@
                     analysisBox.textContent = 'Error generating analysis. Please try again later.';
                 });
         }
-
-        // Load students when the page loads
-        document.addEventListener('DOMContentLoaded', loadStudents);
-    </script>
-
-    <script>
+    
         // Global variables to store student data
         let assignedStudents = [];
         let unassignedStudents = [];
-
-        // Load assigned and unassigned students when the page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            loadAssignedStudents();
-            loadUnassignedStudents();
-            loadStudents(); // Keep the original function for the AI analysis section
+    
+        // Load students when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                loadStudents();
+                loadAssignedStudents();
+                loadUnassignedStudents();
+                loadAnnouncements();
+                initializeProfileModal();
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
         });
-
+    
         // Function to load assigned students
         function loadAssignedStudents() {
             fetch('/proctor/api/assigned-students')
@@ -497,17 +1107,18 @@
                         displayAssignedStudents();
                     } else {
                         console.error('Error loading assigned students:', data.message);
-                        document.getElementById('assigned-students-count').textContent =
-                            'You have 0 students assigned';
-                        document.getElementById('assigned-students-list').innerHTML =
-                            '<p class="empty-list">No students assigned yet.</p>';
+                        const countElement = getElement('assigned-students-count');
+                        const listElement = getElement('assigned-students-list');
+                        
+                        if (countElement) countElement.textContent = 'You have 0 students assigned';
+                        if (listElement) listElement.innerHTML = '<p class="empty-list">No students assigned yet.</p>';
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching assigned students:', error);
-                    document.getElementById('assigned-students-count').textContent =
-                        'Error loading students';
-
+                    const countElement = getElement('assigned-students-count');
+                    if (countElement) countElement.textContent = 'Error loading students';
+    
                     // For development/testing - display sample data
                     assignedStudents = [
                         { id: 101, name: 'John Smith', batch: '2022', section: 'A' },
@@ -516,40 +1127,45 @@
                     displayAssignedStudents();
                 });
         }
-
+    
         // Function to display assigned students
         function displayAssignedStudents() {
-            const listElement = document.getElementById('assigned-students-list');
-            const countElement = document.getElementById('assigned-students-count');
-
+            const listElement = getElement('assigned-students-list');
+            const countElement = getElement('assigned-students-count');
+            
+            if (!listElement || !countElement) return;
+    
             countElement.textContent = `You have ${assignedStudents.length} student${assignedStudents.length !== 1 ? 's' : ''} assigned`;
-
+    
             if (assignedStudents.length === 0) {
                 listElement.innerHTML = '<p class="empty-list">No students assigned yet.</p>';
                 return;
             }
-
+    
             listElement.innerHTML = '';
             assignedStudents.forEach(student => {
-                const studentItem = document.createElement('div');
-                studentItem.className = 'student-item';
-                studentItem.innerHTML = `
-                <div class="student-info">${student.name}${student.batch ? ` - ${student.batch}` : ''}${student.section ? ` ${student.section}` : ''}</div>
-                <div class="student-actions">
-                    <button onclick="viewStudentPerformance(${student.id}, '${student.name}')" class="action-btn view-btn">
-                        <i class="fas fa-chart-line"></i>
-                    </button>
-                    <button onclick="removeStudent(${student.id})" class="action-btn remove-btn">
-                        <i class="fas fa-user-minus"></i>
-                    </button>
-                </div>
-            `;
-                listElement.appendChild(studentItem);
+                try {
+                    const studentItem = document.createElement('div');
+                    studentItem.className = 'student-item';
+                    studentItem.innerHTML = `
+                    <div class="student-info">${student.name}${student.batch ? ` - ${student.batch}` : ''}${student.section ? ` ${student.section}` : ''}</div>
+                    <div class="student-actions">
+                        <button onclick="viewStudentPerformance(${student.id}, '${student.name}')" class="action-btn view-btn">
+                            <i class="fas fa-chart-line"></i>
+                        </button>
+                        <button onclick="removeStudent(${student.id})" class="action-btn remove-btn">
+                            <i class="fas fa-user-minus"></i>
+                        </button>
+                    </div>
+                    `;
+                    listElement.appendChild(studentItem);
+                } catch (error) {
+                    console.error('Error displaying student:', student.id, error);
+                }
             });
         }
-
+    
         // Function to load unassigned students
-        // Replace or modify your loadUnassignedStudents function
         function loadUnassignedStudents() {
             console.log('Fetching unassigned students...');
             fetch('/proctor/api/unassigned-students')
@@ -578,16 +1194,17 @@
                     populateUnassignedStudentsDropdown();
                 });
         }
-
+    
         // Function to populate the unassigned students dropdown
         function populateUnassignedStudentsDropdown() {
-            const select = document.getElementById('unassigned-student-select');
-
+            const select = getElement('unassigned-student-select');
+            if (!select) return;
+    
             // Clear options except first one
             while (select.options.length > 1) {
                 select.remove(1);
             }
-
+    
             // Add options for each unassigned student
             unassignedStudents.forEach(student => {
                 const option = document.createElement('option');
@@ -596,17 +1213,19 @@
                 select.appendChild(option);
             });
         }
-
+    
         // Function to assign a student
         function assignStudent() {
-            const select = document.getElementById('unassigned-student-select');
+            const select = getElement('unassigned-student-select');
+            if (!select) return;
+            
             const studentId = select.value;
-
+    
             if (!studentId) {
                 alert('Please select a student to assign');
                 return;
             }
-
+    
             // Send request to assign student
             fetch('/proctor/assign-student', {
                 method: 'POST',
@@ -622,15 +1241,15 @@
                         const student = unassignedStudents.find(s => s.id == studentId);
                         // Remove from unassigned and add to assigned
                         unassignedStudents = unassignedStudents.filter(s => s.id != studentId);
-                        assignedStudents.push(student);
-
+                        if (student) assignedStudents.push(student);
+    
                         // Update UI
                         populateUnassignedStudentsDropdown();
                         displayAssignedStudents();
-
+    
                         // Reset select
                         select.value = '';
-
+    
                         alert('Student assigned successfully!');
                     } else {
                         alert('Error assigning student: ' + data.message);
@@ -638,23 +1257,23 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-
+    
                     // For development/testing - simulate successful assignment
                     const student = unassignedStudents.find(s => s.id == studentId);
                     unassignedStudents = unassignedStudents.filter(s => s.id != studentId);
-                    assignedStudents.push(student);
+                    if (student) assignedStudents.push(student);
                     populateUnassignedStudentsDropdown();
                     displayAssignedStudents();
                     select.value = '';
                 });
         }
-
+    
         // Function to remove an assigned student
         function removeStudent(studentId) {
             if (!confirm('Are you sure you want to remove this student from your assignments?')) {
                 return;
             }
-
+    
             fetch('/proctor/remove-student', {
                 method: 'POST',
                 headers: {
@@ -669,12 +1288,12 @@
                         const student = assignedStudents.find(s => s.id == studentId);
                         // Remove from assigned and add to unassigned
                         assignedStudents = assignedStudents.filter(s => s.id != studentId);
-                        unassignedStudents.push(student);
-
+                        if (student) unassignedStudents.push(student);
+    
                         // Update UI
                         populateUnassignedStudentsDropdown();
                         displayAssignedStudents();
-
+    
                         alert('Student removed successfully!');
                     } else {
                         alert('Error removing student: ' + data.message);
@@ -682,82 +1301,86 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-
+    
                     // For development/testing - simulate successful removal
                     const student = assignedStudents.find(s => s.id == studentId);
                     assignedStudents = assignedStudents.filter(s => s.id != studentId);
-                    unassignedStudents.push(student);
+                    if (student) unassignedStudents.push(student);
                     populateUnassignedStudentsDropdown();
                     displayAssignedStudents();
                 });
         }
-
-        // Replace the displayPerformanceData function
+    
+        // Function to display performance data
         function displayPerformanceData(performance, container) {
+            if (!container) return;
+            
             if (!performance.semesters || performance.semesters.length === 0) {
                 container.innerHTML = '<p>No academic performance data has been uploaded by this student yet.</p>';
                 return;
             }
-
+    
             let html = '';
-
+    
             // Display student name in the modal
             if (performance.studentName) {
                 html = `<h4>${performance.studentName}'s Performance</h4>`;
             }
-
+    
             performance.semesters.forEach(semester => {
                 html += `
-            <div class="semester-performance">
-                <div class="semester-header">${semester.name} - CGPA: ${semester.cgpa}</div>
-                <div class="subject-list">
-        `;
-
+                <div class="semester-performance">
+                    <div class="semester-header">${semester.name} - CGPA: ${semester.cgpa || '--'}</div>
+                    <div class="subject-list">
+                `;
+    
                 if (semester.subjects && semester.subjects.length > 0) {
                     // Group subjects by exam type for better organization
                     const examTypes = new Set(semester.subjects.map(s => s.examType));
-
+    
                     examTypes.forEach(examType => {
                         html += `<div class="exam-type"><strong>${examType || 'General'}</strong></div>`;
-
+    
                         // Get subjects for this exam type
                         const examSubjects = semester.subjects.filter(s => s.examType === examType);
-
+    
                         examSubjects.forEach(subject => {
-                            const percentage = (subject.marks / subject.maxMarks) * 100;
+                            const percentage = (subject.marks / (subject.maxMarks || 100)) * 100;
                             html += `
-                        <div class="subject-item">
-                            <span>${subject.name}</span>
-                            <span>${subject.marks}/${subject.maxMarks} (${percentage.toFixed(1)}%)</span>
-                        </div>
-                    `;
+                            <div class="subject-item">
+                                <span>${subject.name}</span>
+                                <span>${subject.marks}/${subject.maxMarks || 100} (${percentage.toFixed(1)}%)</span>
+                            </div>
+                            `;
                         });
-
+    
                         html += `<hr class="subject-divider">`;
                     });
                 } else {
                     html += `<p>No subject data available for this semester</p>`;
                 }
-
+    
                 html += `
+                    </div>
                 </div>
-            </div>
-        `;
+                `;
             });
-
+    
             container.innerHTML = html;
         }
-
+    
         // Function to view student performance
         function viewStudentPerformance(studentId, studentName) {
-            const modal = document.getElementById('performance-modal');
-            const modalTitle = document.getElementById('modal-student-name');
-            const performanceData = document.getElementById('performance-data');
-
+            const modal = getElement('performance-modal');
+            const modalTitle = getElement('modal-student-name');
+            const performanceData = getElement('performance-data');
+            
+            if (!modal || !modalTitle || !performanceData) return;
+    
             modalTitle.textContent = `${studentName}'s Performance`;
             performanceData.innerHTML = '<p>Loading performance data...</p>';
             modal.style.display = 'block';
-
+    
             // Fetch performance data for this student
             fetch(`/proctor/student-performance/${studentId}`)
                 .then(response => response.json())
@@ -770,7 +1393,8 @@
                 })
                 .catch(error => {
                     console.error('Error fetching performance data:', error);
-
+                    performanceData.innerHTML = '<p>Error loading performance data. Please try again.</p>';
+    
                     // For development/testing - display sample data
                     const samplePerformance = {
                         semesters: [
@@ -794,15 +1418,485 @@
                             }
                         ]
                     };
-
+    
                     displayPerformanceData(samplePerformance, performanceData);
                 });
         }
-
+    
         // Function to close the performance modal
         function closePerformanceModal() {
-            document.getElementById('performance-modal').style.display = 'none';
+            const modal = getElement('performance-modal');
+            if (modal) modal.style.display = 'none';
         }
+    
+        // Load proctor's announcements
+        function loadAnnouncements() {
+            const announcementsList = getElement('announcements-list');
+            if (!announcementsList) return;
+            
+            fetch('/proctor/api/announcements')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.announcements && data.announcements.length > 0) {
+                        let html = '<ul class="announcements">';
+                        data.announcements.forEach(announcement => {
+                            const date = new Date(announcement.created_at).toLocaleDateString();
+                            html += `
+                                <li class="announcement-item">
+                                    <div class="announcement-header">
+                                        <span class="announcement-title">${announcement.title}</span>
+                                        <span class="announcement-date">${date}</span>
+                                    </div>
+                                    <div class="announcement-content">${announcement.content}</div>
+                                </li>
+                            `;
+                        });
+                        html += '</ul>';
+                        announcementsList.innerHTML = html;
+                    } else {
+                        announcementsList.innerHTML = '<p>No announcements yet.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading announcements:', error);
+                    announcementsList.innerHTML = '<p>Error loading announcements. Please refresh the page.</p>';
+                });
+        }
+    
+        // Initialize announcement form
+        function initializeAnnouncementForm() {
+            const form = getElement('announcement-form');
+            if (!form) return;
+            
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+    
+                const title = getElement('announcement-title').value;
+                const content = getElement('announcement-content').value;
+    
+                if (!title || !content) {
+                    alert('Please fill in both title and content fields');
+                    return;
+                }
+    
+                fetch('/proctor/api/announcements', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, content })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Clear form and reload announcements
+                            const titleElement = getElement('announcement-title');
+                            const contentElement = getElement('announcement-content');
+                            
+                            if (titleElement) titleElement.value = '';
+                            if (contentElement) contentElement.value = '';
+                            
+                            loadAnnouncements();
+                            alert('Announcement sent successfully!');
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error creating announcement:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            });
+        }
+    
+        // Initialize student profile modal
+        function initializeProfileModal() {
+            const modal = getElement('student-profile-modal');
+            const closeButton = document.querySelector('.close-modal');
+            
+            if (!modal || !closeButton) return;
+            
+            // Close modal when clicking the X
+            closeButton.onclick = function () {
+                modal.style.display = "none";
+            };
+    
+            // Close modal when clicking outside
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+            
+            // Initialize save notes button
+            const saveNotesBtn = getElement('save-notes');
+            if (saveNotesBtn) {
+                saveNotesBtn.addEventListener('click', function () {
+                    const studentId = this.getAttribute('data-student-id');
+                    const notesElement = getElement('proctor-notes');
+                    
+                    if (!studentId || !notesElement) return;
+                    
+                    const notes = notesElement.value.trim();
+    
+                    if (!notes) {
+                        alert('Please enter some notes before saving.');
+                        return;
+                    }
+    
+                    fetch(`/proctor/api/student/${studentId}/notes`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ content: notes })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                notesElement.value = '';
+                                loadStudentNotes(studentId); // Reload notes
+                                alert('Notes saved successfully!');
+                            } else {
+                                alert('Error saving notes: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error saving notes:', error);
+                            alert('Failed to save notes. Please try again.');
+                        });
+                });
+            }
+        }
+    
+        // View student profile
+        function viewStudentProfile(studentId) {
+            console.log(`Viewing student profile for ID: ${studentId}`);
+            
+            const modal = getElement('student-profile-modal');
+            const studentNameElement = getElement('student-name');
+            
+            if (!modal || !studentNameElement) return;
+    
+            // Show loading state in modal
+            modal.style.display = "block";
+            studentNameElement.textContent = "Loading...";
+    
+            // Fetch student data
+            fetch(`/proctor/api/student/${studentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayStudentProfile(data.student);
+                        loadStudentNotes(studentId);
+                    } else {
+                        alert('Error loading student profile: ' + data.message);
+                        modal.style.display = "none";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading student profile:', error);
+                    alert('Failed to load student profile. Please try again.');
+                    modal.style.display = "none";
+                });
+        }
+    
+        // Display student profile data in modal
+        function displayStudentProfile(student) {
+            try {
+                // Set basic info - check each element exists before updating
+                setTextContent('student-name', student.name);
+                setTextContent('student-email', student.email);
+                setTextContent('student-batch', student.batch || 'Not set');
+                setTextContent('student-semester', student.current_semester || 'Not set');
+                setTextContent('student-section', student.section || 'Not set');
+                setTextContent('student-usn', student.roll_number || 'Not set');
+    
+                // Format join date
+                const joinDate = student.created_at ? new Date(student.created_at).toLocaleDateString() : 'Not available';
+                const joinedElement = getElement('student-joined');
+                if (joinedElement) joinedElement.textContent = joinDate;
+    
+                // Set academic stats
+                setTextContent('student-cgpa', student.cgpa || '--');
+                setTextContent('student-attendance', student.attendance || '--');
+    
+                // If we have semester data, render the CGPA chart
+                if (student.semesters && student.semesters.length > 0) {
+                    renderStudentCgpaChart(student.semesters);
+                } else {
+                    const chartElement = getElement('student-cgpa-chart');
+                    if (chartElement) {
+                        chartElement.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">No semester performance data available</div>';
+                    }
+                }
+    
+                // Save student ID to the notes form
+                const saveNotesBtn = getElement('save-notes');
+                if (saveNotesBtn) {
+                    saveNotesBtn.setAttribute('data-student-id', student.id);
+                }
+                
+                // Load performance data
+                displayStudentPerformance(student);
+            } catch (error) {
+                console.error('Error displaying student profile:', error);
+            }
+        }
+    
+        // Render CGPA chart
+        function renderStudentCgpaChart(semesters) {
+            const chartCanvas = getElement('student-cgpa-chart');
+            if (!chartCanvas) return;
+            
+            try {
+                // Check if Chart is defined
+                if (typeof Chart === 'undefined') {
+                    console.error('Chart.js is not loaded');
+                    chartCanvas.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Chart visualization unavailable</div>';
+                    return;
+                }
+                
+                // Destroy previous chart if exists
+                if (window.studentCgpaChart) {
+                    window.studentCgpaChart.destroy();
+                }
+    
+                const ctx = chartCanvas.getContext('2d');
+                
+                // Extract chart data
+                let labels = [];
+                let cgpaData = [];
+                
+                try {
+                    labels = semesters.map(sem => {
+                        if (sem.semester_number) return `Semester ${sem.semester_number}`;
+                        if (sem.name && sem.name.includes(' ')) return `Semester ${sem.name.split(' ')[1]}`;
+                        return `Semester ${sem.semester || '?'}`;
+                    });
+                    
+                    cgpaData = semesters.map(sem => parseFloat(sem.cgpa) || 0);
+                } catch (error) {
+                    console.error('Error extracting chart data:', error);
+                    cgpaData = [0];
+                }
+    
+                // Create chart with error handling for min/max values
+                const minValue = Math.max(0, Math.min(...cgpaData.filter(v => !isNaN(v))) - 1 || 0);
+                const maxValue = Math.min(10, Math.max(...cgpaData.filter(v => !isNaN(v))) + 1 || 10);
+    
+                window.studentCgpaChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'CGPA Progression',
+                            data: cgpaData,
+                            borderColor: '#800000',
+                            backgroundColor: 'rgba(128, 0, 0, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#800000'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: minValue,
+                                max: maxValue,
+                                title: {
+                                    display: true,
+                                    text: 'CGPA'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            } catch (chartError) {
+                console.error('Error rendering chart:', chartError);
+                chartCanvas.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Error rendering chart</div>';
+            }
+        }
+    
+        // Display student performance
+        function displayStudentPerformance(student) {
+            try {
+                // Get containers with null checks
+                const noDataMessage = getElement('no-performance-data');
+                const semesterTabs = getElement('semester-tabs');
+                const semesterContent = getElement('semester-content');
+                
+                if (!semesterTabs || !semesterContent) return;
+    
+                // Clear previous data
+                semesterTabs.innerHTML = '';
+                semesterContent.innerHTML = '';
+    
+                // Fetch student's academic performance data
+                fetch(`/proctor/api/student/${student.id}/performance`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.performance && Object.keys(data.performance).length > 0) {
+                            // Hide no data message if it exists
+                            if (noDataMessage) noDataMessage.style.display = 'none';
+    
+                            // Organize data by semester
+                            const semesters = Object.keys(data.performance).sort();
+    
+                            // Create tabs for each semester
+                            let tabsHtml = '<div class="tabs">';
+                            semesters.forEach((semester, index) => {
+                                const isActive = index === 0 ? 'active' : '';
+                                tabsHtml += `<button class="tab-btn ${isActive}" data-semester="${semester}">Sem ${semester}</button>`;
+                            });
+                            tabsHtml += '</div>';
+                            semesterTabs.innerHTML = tabsHtml;
+    
+                            // Create content for each semester
+                            semesters.forEach((semester, index) => {
+                                const semesterData = data.performance[semester];
+                                if (!semesterData) return;
+                                
+                                const examTypes = Object.keys(semesterData);
+                                const isActive = index === 0 ? 'active' : '';
+    
+                                let contentHtml = `<div id="semester-${semester}" class="tab-content ${isActive}">`;
+                                contentHtml += `<p><strong>CGPA:</strong> ${semesterData.cgpa || '--'}</p>`;
+    
+                                // Create table for each exam type
+                                examTypes.forEach(examType => {
+                                    if (examType !== 'cgpa' && 
+                                        semesterData[examType] && 
+                                        semesterData[examType].subjects && 
+                                        semesterData[examType].subjects.length > 0) {
+                                        
+                                        let examTitle = '';
+                                        switch (examType) {
+                                            case 'ia1': examTitle = '1st Internal Assessment'; break;
+                                            case 'ia2': examTitle = '2nd Internal Assessment'; break;
+                                            case 'ia3': examTitle = '3rd Internal Assessment'; break;
+                                            case 'sem': examTitle = 'Semester End Exam'; break;
+                                            default: examTitle = examType;
+                                        }
+    
+                                        contentHtml += `<div class="exam-section">
+                                        <h5>${examTitle}</h5>
+                                        <table class="marks-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Subject</th>
+                                                    <th>Marks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+    
+                                        semesterData[examType].subjects.forEach(subject => {
+                                            contentHtml += `<tr>
+                                            <td>${subject.name}</td>
+                                            <td>${subject.marks !== '' ? subject.marks + '/100' : '--'}</td>
+                                        </tr>`;
+                                        });
+    
+                                        contentHtml += `</tbody>
+                                        </table>
+                                    </div>`;
+                                    }
+                                });
+    
+                                contentHtml += '</div>';
+                                semesterContent.innerHTML += contentHtml;
+                            });
+    
+                            // Add tab switching functionality
+                            document.querySelectorAll('.tab-btn').forEach(button => {
+                                button.addEventListener('click', function () {
+                                    try {
+                                        const semester = this.getAttribute('data-semester');
+                                        if (!semester) return;
+    
+                                        // Update active tab
+                                        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                                        this.classList.add('active');
+    
+                                        // Update active content
+                                        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                                        const semesterElement = document.getElementById(`semester-${semester}`);
+                                        if (semesterElement) {
+                                            semesterElement.classList.add('active');
+                                        }
+                                    } catch (clickError) {
+                                        console.error('Error in tab click handler:', clickError);
+                                    }
+                                });
+                            });
+    
+                        } else {
+                            // Show no data message
+                            if (noDataMessage) {
+                                noDataMessage.style.display = 'block';
+                                noDataMessage.innerHTML = '<p>No academic performance data available for this student.</p>';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching performance data:', error);
+                        if (noDataMessage) {
+                            noDataMessage.style.display = 'block';
+                            noDataMessage.innerHTML = '<p>Error loading performance data.</p>';
+                        }
+                    });
+            } catch (error) {
+                console.error('Error in displayStudentPerformance:', error);
+            }
+        }
+    
+        // Load student notes
+        function loadStudentNotes(studentId) {
+            const notesContainer = getElement('saved-notes-history');
+            if (!notesContainer) return;
+            
+            fetch(`/proctor/api/student/${studentId}/notes`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.notes && data.notes.length > 0) {
+                        let notesHtml = '';
+                        data.notes.forEach(note => {
+                            const noteDate = new Date(note.created_at).toLocaleString();
+                            notesHtml += `
+                            <div class="note-entry">
+                                <div class="note-date">${noteDate}</div>
+                                <div class="note-text">${note.content}</div>
+                            </div>
+                        `;
+                        });
+                        notesContainer.innerHTML = notesHtml;
+                    } else {
+                        notesContainer.innerHTML = '<p>No notes have been added for this student yet.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading notes:', error);
+                    notesContainer.innerHTML = '<p>Error loading notes. Please refresh.</p>';
+                });
+        }
+    
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                initializeAnnouncementForm();
+            } catch (error) {
+                console.error('Error initializing announcement form:', error);
+            }
+        });
     </script>
 
 </body>

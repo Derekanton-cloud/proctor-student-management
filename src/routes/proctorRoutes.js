@@ -68,4 +68,15 @@ router.post('/remove-student', proctorController.removeStudent);
 // Student performance data
 router.get('/student-performance/:studentId', proctorController.getStudentPerformance);
 
+// Announcements
+router.post('/api/announcements', isAuthenticated, isProctor, proctorController.createAnnouncement);
+router.get('/api/announcements', isAuthenticated, isProctor, proctorController.getProctorAnnouncements);
+
+// Student profile API routes
+router.get('/api/student/:studentId', isAuthenticated, isProctor, proctorController.getStudentProfile);
+router.get('/api/student/:studentId/notes', isAuthenticated, isProctor, proctorController.getStudentNotes);
+router.post('/api/student/:studentId/notes', isAuthenticated, isProctor, proctorController.saveStudentNote);
+// Get student performance data
+router.get('/api/student/:studentId/performance', isAuthenticated, isProctor, proctorController.getStudentPerformanceData);
+
 module.exports = router;

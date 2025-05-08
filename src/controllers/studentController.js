@@ -298,3 +298,46 @@ exports.updateProfile = async (req, res) => {
         res.status(500).send('An error occurred updating your profile');
     }
 };
+
+// Get announcements for a student
+exports.getStudentAnnouncements = async (req, res) => {
+    try {
+        const studentId = req.session.user.id;
+        
+        // Get student's proctor_id first
+        const studentData = await db.query(
+            'SELECT proctor_id FROM users WHERE id = $1',
+            [studentId]
+        );
+        
+        if (!studentData.rows[0] || !studentData.rows[0].proctor_id) {
+            return res.json({
+                success: true,
+                announcements: [],
+                message: 'You have no assigned proctor yet'
+            });
+        }
+        
+        const proctorId = studentData.rows[0].proctor_id;
+        
+        // Get announcements from that proctor
+        const announcements = await db.query(
+            'SELECT a.id, a.title, a.content, a.created_at, u.name as proctor_name ' +
+            'FROM announcements a ' +
+            'JOIN users u ON a.proctor_id = u.id ' +
+            'WHERE a.proctor_id = $1 ORDER BY a.created_at DESC',
+            [proctorId]
+        );
+        
+        res.json({
+            success: true,
+            announcements: announcements.rows
+        });
+    } catch (error) {
+        console.error('Error getting student announcements:', error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while getting announcements'
+        });
+    }
+};

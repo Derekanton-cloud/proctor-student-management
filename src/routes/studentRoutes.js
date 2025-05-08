@@ -75,4 +75,7 @@ router.get('/api/performance', isAuthenticated, isStudent, studentController.get
 router.get('/profile', isAuthenticated, isStudent, studentController.getProfile);
 router.post('/profile/update', isAuthenticated, isStudent, studentController.updateProfile);
 
+// Announcements
+router.get('/api/announcements', isAuthenticated, isStudent, studentController.getStudentAnnouncements);
+
 module.exports = router;
