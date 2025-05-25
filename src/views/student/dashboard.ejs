@@ -412,6 +412,24 @@
                 margin-bottom: 20px;
             }
         }
+
+        /* Add this to your CSS file */
+        .logout-container .action-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-top: 40px;
+            margin-bottom: -100px;
+        }
+
+        .logout-container .action-btn:hover {
+            background-color:  #800000;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -558,6 +576,12 @@
                 </a>
             </div>
         </div>
+          <!-- Add this logout button in the Proctor Dashboard -->
+    <div class="logout-container" style="text-align: right; margin-bottom: 20px;">
+        <button id="logout-btn" class="action-btn" style="background-color: #d32f2f;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
     </div>
 
     <script>
@@ -1164,6 +1188,30 @@
 
         // Load announcements when the page loads
         document.addEventListener('DOMContentLoaded', loadAnnouncements);
+    </script>
+
+    <script>
+        // Logout function
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        // Redirect to login page after successful logout
+                        window.location.href = '/login';
+                    } else {
+                        alert('Logout failed. Please try again.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error during logout:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        });
     </script>
 </body>
 

@@ -5,6 +5,7 @@ const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const proctorRoutes = require('./routes/proctorRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 const { connectDB } = require('./config/db');
 
 const app = express();
@@ -30,6 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/auth', authRoutes);
 app.use('/students', studentRoutes);
 app.use('/proctors', proctorRoutes);
+app.use('/ai', aiRoutes);
 
 // Home route
 app.get('/', (req, res) => {

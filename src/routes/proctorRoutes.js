@@ -79,4 +79,17 @@ router.post('/api/student/:studentId/notes', isAuthenticated, isProctor, proctor
 // Get student performance data
 router.get('/api/student/:studentId/performance', isAuthenticated, isProctor, proctorController.getStudentPerformanceData);
 
+router.get('/analysis', isAuthenticated, isProctor, proctorController.getStudentAnalysisPage);
+
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ success: false, message: 'Logout failed' });
+        }
+        res.clearCookie('connect.sid'); // Clear the session cookie
+        res.status(200).json({ success: true, message: 'Logged out successfully' });
+    });
+});
+
 module.exports = router;

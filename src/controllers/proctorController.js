@@ -718,33 +718,34 @@ exports.getStudentPerformanceData = async (req, res) => {
                 });
             }
 
-            // Get performance data without assuming cgpa column exists
+            // Get performance data by joining student_performance and performance_subjects tables
             const semesterData = await db.query(
-                'SELECT semester, exam_type, subject, marks, max_marks ' +
-                'FROM academic_performance ' +
-                'WHERE student_id = $1 ' +
-                'ORDER BY semester, exam_type, subject',
+                'SELECT sp.semester, sp.exam_type, sp.cgpa, ps.subject_name as subject, ps.marks, 100 as max_marks ' +
+                'FROM student_performance sp ' +
+                'LEFT JOIN performance_subjects ps ON sp.id = ps.performance_id ' +
+                'WHERE sp.student_id = $1 ' +
+                'ORDER BY sp.semester, sp.exam_type, ps.subject_name',
                 [studentId]
             );
 
             // Format data for the student profile modal
             const semesterGroups = {};
+            
+            // First, initialize all semesters in the data
+            const uniqueSemesters = [...new Set(semesterData.rows.map(row => row.semester))];
+            uniqueSemesters.forEach(semester => {
+                semesterGroups[semester] = {
+                    cgpa: 0,
+                    ia1: { subjects: [] },
+                    ia2: { subjects: [] },
+                    ia3: { subjects: [] },
+                    sem: { subjects: [] },
+                    allSubjects: []
+                };
+            });
+            
+            // Then populate with actual data
             semesterData.rows.forEach(row => {
-                if (!semesterGroups[row.semester]) {
-                    semesterGroups[row.semester] = {
-                        cgpa: 0,
-                        ia1: { subjects: [] },
-                        ia2: { subjects: [] },
-                        ia3: { subjects: [] },
-                        sem: { subjects: [] }
-                    };
-                }
-
-                // Make sure the exam_type exists in our structure
-                if (!semesterGroups[row.semester][row.exam_type]) {
-                    semesterGroups[row.semester][row.exam_type] = { subjects: [] };
-                }
-
                 // Add subject to the appropriate exam type
                 semesterGroups[row.semester][row.exam_type].subjects.push({
                     name: row.subject,
@@ -753,10 +754,6 @@ exports.getStudentPerformanceData = async (req, res) => {
                 });
 
                 // Also track all subjects for CGPA calculation
-                if (!semesterGroups[row.semester].allSubjects) {
-                    semesterGroups[row.semester].allSubjects = [];
-                }
-
                 semesterGroups[row.semester].allSubjects.push({
                     name: row.subject,
                     marks: parseFloat(row.marks),
@@ -799,4 +796,11 @@ exports.getStudentPerformanceData = async (req, res) => {
             message: 'An error occurred while getting student performance data'
         });
     }
+};
+
+exports.getStudentAnalysisPage = (req, res) => {
+  res.render('proctor/student-analysis', {
+    title: 'Student AI Analysis',
+    user: req.user
+  });
 };

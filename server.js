@@ -4,7 +4,6 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const dotenv = require('dotenv');
-const aiRoutes = require('./src/routes/aiRoutes');
 const db = require('./src/config/db');
 const sequelize = require('./src/config/sequelize'); 
 const Student = require('./src/models/studentModel'); 
@@ -16,11 +15,6 @@ const PORT = process.env.PORT || 3000;
 
 // Database connection
 db.connectDB();
-
-// Synchronize Sequelize models
-sequelize.sync({ alter: true }) // Use `alter: true` for development; remove in production
-    .then(() => console.log('Database synchronized'))
-    .catch(err => console.error('Error synchronizing database:', err));
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,6 +36,7 @@ app.set('views', path.join(__dirname, 'src/views'));
 const authRoutes = require('./src/routes/authRoutes');
 const studentRoutes = require('./src/routes/studentRoutes');
 const proctorRoutes = require('./src/routes/proctorRoutes');
+const aiRoutes = require('./src/routes/aiRoutes');
 
 // Redirect root URL to login page
 app.get('/', (req, res) => {
@@ -52,6 +47,7 @@ app.use('/auth', authRoutes);
 app.use('/student', studentRoutes);
 app.use('/proctor', proctorRoutes);
 app.use('/ai', aiRoutes);
+app.use('/', authRoutes);
 
 // Start server
 app.listen(PORT, () => {
